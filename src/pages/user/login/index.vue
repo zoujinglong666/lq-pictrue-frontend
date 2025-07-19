@@ -48,9 +48,9 @@ import {message} from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import Logo from "../../../assets/images/logo.png";
 const formState = reactive<API.UserLoginRequest & { remember?: boolean }>({
+  userAccount: localStorage.getItem('rememberAccount') || '',
   userPassword: '',
-  userAccount: '',
-  remember: false,
+  remember: true,
 });
 const loginLoading = ref(false);
 const router = useRouter();
@@ -59,7 +59,12 @@ const onFinish = async (values: any) => {
   try {
     const res = await userLoginUsingPost(values);
     const userStore = useUserStoreWithout();
-    userStore.setUserInfo(res.data);
+    userStore.setUserInfo(res.data as any);
+    if (formState.remember) {
+      localStorage.setItem('rememberAccount', formState.userAccount || '');
+    } else {
+      localStorage.removeItem('rememberAccount');
+    }
     await router.push({path: '/'});
     message.success('登录成功');
   } catch (err) {

@@ -18,14 +18,10 @@
     </template>
   </ProTable>
 </div>
-
-
 </template>
-
 <script lang="ts" setup>
 import ProTable from "@/components/ProTable/index.vue";
 import {listPictureByPageUsingPost} from "@/api/pictureController.ts";
-import {ref} from "vue";
 const columns = [
   {
     title: '图片名称',
@@ -119,31 +115,13 @@ const columns = [
         label: 'URL',
         type: 'input',
   },
-
-
-  // {
-  //   title: '操作',
-  //   dataIndex: 'action',
-  //   key: 'action',
-  // },
+  {
+    title: '操作',
+    dataIndex: 'action',
+    key: 'action',
+  },
 ];
-function handleSubmit(value) {
-  console.log(value);
-}
-const formData = ref({
-  name: '',
-  picFormat: '',
-  picSize: '',
-  picWidth: '',
-  picHeight: '',
-  createTime: '',
-  updateTime: '',
-  userId: '',
-  category: '',
-  tags: '',
-  introduction: '',
-  url: '',
-})
+
 
 
 </script>

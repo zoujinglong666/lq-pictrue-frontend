@@ -67,11 +67,12 @@ const loading = ref(false);
 // ------------------ 自定义上传逻辑 ------------------
 const handleCustomUpload: UploadProps['customRequest'] = async (options) => {
   const { file, onSuccess, onError } = options;
+  console.log(file)
   loading.value = true;
   try {
     const res = await uploadPictureUsingPost({
 
-    },{},file, );
+    },{},file);
     console.log('Upload success:', res)
     message.success(`${file.name} 上传成功`);
     fileList.value.push({
@@ -107,10 +108,11 @@ const onChange = (info: UploadChangeParam) => {
 
 .avatar-uploader ::v-deep(.ant-upload.ant-upload-select-picture-card) {
   width: 100% !important;
-  height: 200px !important;
+  height: 180px !important;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .avatar-uploader ::v-deep(.ant-upload-select-picture-card i) {
@@ -121,5 +123,18 @@ const onChange = (info: UploadChangeParam) => {
 .avatar-uploader ::v-deep(.ant-upload-text) {
   margin-top: 8px;
   color: #666;
+}
+
+.avatar-uploader img {
+  max-width: 100%;
+  max-height: 180px;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f6f8fa;
+  box-shadow: 0 2px 8px rgba(60,80,120,0.04);
 }
 </style>

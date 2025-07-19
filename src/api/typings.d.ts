@@ -29,6 +29,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePagePictureVO_ = {
+    code?: number;
+    data?: PagePictureVO_;
+    message?: string;
+  };
+
   type BaseResponsePageUserVO_ = {
     code?: number;
     data?: PageUserVO_;
@@ -74,6 +80,14 @@ declare namespace API {
     current?: number;
     pages?: number;
     records?: Picture[];
+    size?: number;
+    total?: number;
+  };
+
+  type PagePictureVO_ = {
+    current?: number;
+    pages?: number;
+    records?: PictureVO[];
     size?: number;
     total?: number;
   };

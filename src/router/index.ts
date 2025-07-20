@@ -7,13 +7,17 @@ import LoginPage from '@/pages/user/login/index.vue'
 import RegisterPage from '@/pages/user/register/index.vue'
 import UserManagePage from '@/pages/userManage/index.vue'
 import PictureManagePage from '@/pages/pictureManage/index.vue'
+import PictureManageDetailPage from '@/pages/pictureManage/detail.vue'
 import UploadPage from '@/pages/upload/index.vue'
+import UserProfilePage from '@/pages/user/profile/index.vue'
 
 const routes = [
     {path: '/', component: HomePage, meta: { title: '主页' }},
     {path: '/about', component: AboutPage, meta: { title: '关于' }},
-    {path: '/user/login', component: LoginPage, meta: { title: '登录', hideInMenu: true }},
-    {path: '/user/register', component: RegisterPage, meta: { title: '注册', hideInMenu: true }},
+    {path: '/user/login', component: LoginPage, meta: { title: '登录', hideInMenu: true, hideFooter: true, hideLayout: true }},
+    {path: '/user/register', component: RegisterPage, meta: { title: '注册', hideInMenu: true, hideFooter: true, hideLayout: true }},
+    {path: '/user/profile', component: UserProfilePage, meta: { title: '个人信息', hideInMenu: true, hideFooter: true }},
+    {path: '/pictureManage/detail', component: PictureManageDetailPage, meta: { title: '图片详情', hideInMenu: true, hideFooter: true }},
     {path: '/userManage', component: UserManagePage, meta: { title: '用户管理', permission: 'admin' }},
     {path: '/pictureManage', component: PictureManagePage, meta: { title: '图片管理', permission: ['admin', 'user'] }},
     {path: '/addPicture', component: UploadPage, meta: { title: '创建图片', permission: ['admin', 'user'] }},

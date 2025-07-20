@@ -49,22 +49,26 @@ export const useUserStore = defineStore("user", () => {
     }
 
     // 登出
+    const clearLocalData = () => {
+        roles.value = [];
+        userInfo.value = {};
+        username.value = "";
+        isLoggedIn.value = false;
+        localStorage.removeItem('user-store');
+        sessionStorage.removeItem('user-store');
+    };
+
     const logout = async () => {
         try {
+            clearLocalData();
             await userLogoutUsingPost();
         } catch (error) {
-            console.error('Logout API error:', error);
-            // 即使API调用失败，也要清空本地数据
+            console.error('❌ Logout API failed:', error);
+            // 失败时也继续清理本地数据
         } finally {
-            // 清空本地数据
-            roles.value = []
-            userInfo.value = {}
-            username.value = ""
-            isLoggedIn.value = false
-            localStorage.removeItem('user-store');
-            sessionStorage.removeItem('user-store');
+            clearLocalData();
         }
-    }
+    };
 
     const setUserInfo = (data: UserInfo) => {
         userInfo.value = data

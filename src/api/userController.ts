@@ -62,3 +62,18 @@ export async function userRegisterUsingPost(
     ...(options || {}),
   });
 }
+
+/** updateUserInfo POST /api/user/update/info */
+export async function updateUserInfoUsingPost(
+  body: API.UserUpdateRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseLoginUserVO_>("/api/user/update/info", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

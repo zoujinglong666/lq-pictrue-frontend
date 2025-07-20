@@ -15,7 +15,7 @@ importers:
         specifier: ^22.15.29
         version: 22.16.4
       ant-design-vue:
-        specifier: ^4.2.6
+        specifier: ^4.2.5
         version: 4.2.6(vue@3.5.17(typescript@5.8.3))
       axios:
         specifier: ^1.9.0
@@ -23,6 +23,9 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      nprogress:
+        specifier: ^0.2.0
+        version: 0.2.0
       pinia:
         specifier: ^3.0.3
         version: 3.0.3(typescript@5.8.3)(vue@3.5.17(typescript@5.8.3))
@@ -990,6 +993,9 @@ packages:
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
+
+  nprogress@0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
 
   number-to-words@1.2.4:
     resolution: {integrity: sha512-/fYevVkXRcyBiZDg6yzZbm0RuaD6i0qRfn8yr+6D0KgBMOndFPxuW10qCHpzs50nN8qKuv78k8MuotZhcVX6Pw==}
@@ -2262,6 +2268,8 @@ snapshots:
       es6-promise: 3.3.1
 
   normalize-path@3.0.0: {}
+
+  nprogress@0.2.0: {}
 
   number-to-words@1.2.4: {}
 

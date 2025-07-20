@@ -49,7 +49,7 @@ import {UserOutlined, LockOutlined} from '@ant-design/icons-vue';
 import {userRegisterUsingPost} from "@/api/userController.ts";
 import router from "@/router";
 import {message} from 'ant-design-vue';
-import Logo from "../../../assets/images/logo.png";
+import Logo from "@/assets/images/logo.png";
 const formState = reactive<API.UserRegisterRequest>({
   userPassword: '',
   userAccount: '',

@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { listUserUsingGet } from "@/api/userController.ts";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 
 // 列定义（含中文标题）
 const columns = [
@@ -59,7 +59,6 @@ const columns = [
 ];
 
 const tableData = ref([]);
-const pageState = reactive({});
 
 const fetchData = async () => {
   const res = await listUserUsingGet({

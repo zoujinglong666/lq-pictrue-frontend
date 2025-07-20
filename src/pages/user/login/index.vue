@@ -46,7 +46,7 @@ import {userLoginUsingPost} from '@/api/userController.ts';
 import {useUserStoreWithout} from '@/stores/modules/user.ts';
 import {message} from 'ant-design-vue';
 import { useRouter } from 'vue-router';
-import Logo from "../../../assets/images/logo.png";
+import Logo from "@/assets/images/logo.png";
 const formState = reactive<API.UserLoginRequest & { remember?: boolean }>({
   userAccount: localStorage.getItem('rememberAccount') || '',
   userPassword: '',

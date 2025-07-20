@@ -1,18 +1,20 @@
 <template>
-  <ProForm :columns="columns" v-model="formData" @submit="handleSubmit" @reset="handleReset"></ProForm>
+  <div class="pro-table">
+    <ProForm :columns="searchColumns" v-model="formData" @submit="handleSubmit" @reset="handleReset"></ProForm>
+    <a-table
+        :columns="columns"
+        :row-key="rowKeyFn"
+        :data-source="dataSource"
+        :pagination="pagination"
+        :loading="loading"
+        @change="handleTableChange"
+    >
+      <template #bodyCell="{ column, text, record }">
+        <slot name="bodyCell" :column="column" :text="text" :record="record" />
+      </template>
+    </a-table>
+  </div>
 
-  <a-table
-      :columns="columns"
-      :row-key="rowKeyFn"
-      :data-source="dataSource"
-      :pagination="pagination"
-      :loading="loading"
-      @change="handleTableChange"
-  >
-    <template #bodyCell="{ column, text, record }">
-      <slot name="bodyCell" :column="column" :text="text" :record="record" />
-    </template>
-  </a-table>
 </template>
 
 <script lang="ts" setup>
@@ -25,8 +27,8 @@ async function handleSubmit(formValues) {
   loading.value = true;
   try {
     const res = await props.api({
-      page: current.value,
-      size: pageSize.value,
+      current: current.value,
+      pageSize: pageSize.value,
       ...formValues
     });
     const result = res.data;
@@ -42,7 +44,6 @@ async function handleSubmit(formValues) {
 }
 
  function handleReset() {
-   console.log('Reset:', formData);
   current.value = 1;
    fetchData();
 }
@@ -55,6 +56,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const searchColumns = computed(() => props.columns.filter(col => !col.hideInSearch));
+
 const loading = ref(false);
 const dataSource = ref<any[]>([]);
 const current = ref(1);
@@ -64,20 +67,18 @@ const total = ref(0);
 // 默认 rowKey 函数
 const rowKeyFn = props.rowKey ?? ((record: any) => record.id);
 
-// 请求数据函数（根据后端结构）
 const fetchData = async () => {
   loading.value = true;
   try {
     const res = await props.api({
-      page: current.value,
-      size: pageSize.value,
-
+      current: current.value,
+      pageSize: pageSize.value,
     });
 
     const data = res.data;
 
     dataSource.value = data.records ?? [];
-    total.value = data.total ?? 0;
+    total.value = Number(data.total) ?? 0;
     current.value = data.current ?? 1;
 
   } catch (e) {
@@ -93,20 +94,36 @@ fetchData();
 // 分页对象
 const pagination = computed(() => ({
   total: total.value,
-  current: current.value,
-  pageSize: pageSize.value,
+  current: Number(current.value),
+  pageSize:  Number(pageSize.value),
   showSizeChanger: true, // 可选：让用户切换 pageSize
   showQuickJumper: true, // 可选：跳转页码
 }));
 
 // 表格分页/排序/筛选变化
 const handleTableChange: TableProps['onChange'] = (
-    pag,
+    page,
     filters,
     sorter,
 ) => {
-  current.value = pag.current;
-  pageSize.value = pag.pageSize;
+  current.value = page.current;
+  pageSize.value = page.pageSize;
   fetchData(); // 重新请求
 };
+
+const reload = () => {
+  current.value = 1;
+  pageSize.value = 10;
+  fetchData(); // 刷新
+};
+defineExpose({
+  reload,
+})
 </script>
+
+<style  scoped>
+.pro-table {
+  width: 100%;
+  overflow-x: hidden;
+}
+</style>

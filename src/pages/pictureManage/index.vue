@@ -1,17 +1,18 @@
 <template>
 <div>
   <ProTable
+      ref="tableRef"
       :api="listPictureByPageUsingPost"
       :columns="columns"
 
   >
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'action'">
-        <span>
-          <a>删除</a>
-        </span>
+        <a-button type="link" danger @click="handleDelete(record)">删除</a-button>
       </template>
-
+      <template v-if="column.key === 'name'">
+      <div style="width: 100px;">{{record.name}}</div>
+      </template>
       <template v-if="column.key === 'url'">
         <a-image :src="record.url"  style="width: 100px; height: 100px;object-fit: cover;" />
       </template>
@@ -21,7 +22,9 @@
 </template>
 <script lang="ts" setup>
 import ProTable from "@/components/ProTable/index.vue";
-import {listPictureByPageUsingPost} from "@/api/pictureController.ts";
+import {deletePictureUsingPost, listPictureByPageUsingPost} from "@/api/pictureController.ts";
+import {message, Modal} from "ant-design-vue";
+import {ref, toRefs} from "vue";
 const columns = [
   {
     title: '图片名称',
@@ -29,6 +32,7 @@ const columns = [
     key: 'name',
     label: '图片名称',
     type: 'input',
+    width: 80,
   },
   {
     title: '图片格式',
@@ -50,6 +54,7 @@ const columns = [
     key: 'picWidth',
     label: '图片宽度',
     type: 'input',
+    hideInSearch: true,
   },
   {
     title: '图片高度',
@@ -57,6 +62,7 @@ const columns = [
     dataIndex: 'picHeight',
     key: 'picHeight',
     type: 'input',
+    hideInSearch: true,
   },
   {
     title: '图片缩放比例',
@@ -64,6 +70,8 @@ const columns = [
     key: 'picScale',
     label: '图片缩放比例',
     type: 'input',// 缩写
+
+    hideInSearch: true,
 
   },
   {
@@ -80,6 +88,7 @@ const columns = [
     key: 'updateTime',
     label: '更新时间',
     type: 'input',
+    hideInSearch: true,
   },
   {
     title: '用户ID',
@@ -100,13 +109,15 @@ const columns = [
     dataIndex: 'tags',
     key: 'tags',
     label: '标签',
-    type: 'input',
+    type: 'select',
   },
   {
     title: '介绍',
     dataIndex: 'introduction',
     key: 'introduction',
     label: '介绍',
+    hideInSearch: true,
+
   },
   {
     title: 'URL',
@@ -119,9 +130,30 @@ const columns = [
     title: '操作',
     dataIndex: 'action',
     key: 'action',
+    hideInSearch: true,
   },
 ];
 
+const tableRef=ref(null)
+
+const handleDelete = (record: any) => {
+  Modal.confirm({
+    title: '确定要删除这张图片吗？',
+    content: `图片名称：${record.name}`,
+    okText: '删除',
+    okType: 'danger',
+    cancelText: '取消',
+    async onOk() {
+      const res = await deletePictureUsingPost({ id: record.id });
+      if (res.code === 0 && res.data) {
+        message.success('删除成功');
+        tableRef.value && tableRef.value.reload && tableRef.value.reload();
+      } else {
+        message.error(res.message || '删除失败');
+      }
+    },
+  });
+};
 
 
 </script>

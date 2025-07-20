@@ -16,7 +16,7 @@
         <template #overlay>
           <a-menu>
             <a-menu-item>
-              <a href="javascript:;">个人信息</a>
+              <a  @click="handleProfile" href="/user/profile">个人信息</a>
             </a-menu-item>
             <a-menu-item>
               <a href="javascript:;" @click="handleLogout">退出登录</a>
@@ -40,7 +40,6 @@ const current = ref<string[]>(['/']);
 const userStore = useUserStoreWithout();
 const router = useRouter();
 const isLoggedIn = computed(() => userStore.isLoggedIn);
-// ... existing code ...
 const menuItems = computed(() => {
   const routes = router.getRoutes()
       .filter(route => {
@@ -73,12 +72,13 @@ const menuItems = computed(() => {
   }
   return items;
 });
-// ... existing code ...
 
 const handleLogin = () => {
   router.push('/user/login');
 };
-
+const handleProfile = () => {
+  router.push('/user/profile');
+}
 const handleClick = (info: MenuInfo) => {
   current.value = [String(info.key)];
   router.push(String(info.key));
@@ -111,6 +111,7 @@ const goHome = () => {
 .navbar-logo-area {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 .navbar-logo {
   width: 32px;

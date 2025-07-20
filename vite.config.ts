@@ -1,8 +1,9 @@
 import {defineConfig, loadEnv} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'node:path'
+import {AntDesignVueResolver} from "unplugin-vue-components/resolvers";
 // 自动按需引入UI库
-// import Components from 'unplugin-vue-components/vite'
+import Components from 'unplugin-vue-components/vite'
 // import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 // 环境变量
 // https://vitejs.dev/config/
@@ -12,10 +13,13 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       vue(),
-      // Components({
-      //   resolvers: [AntDesignVueResolver()],
-      //   dts: 'src/components.d.ts',
-      // }),
+      Components({
+        resolvers: [
+          AntDesignVueResolver({
+            importStyle: false, // css in js
+          }),
+        ],
+      }),,
     ],
     resolve: {
       alias: {
@@ -38,6 +42,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
+      host: '0.0.0.0',
       port: 3000,
       open: true,
       proxy: {

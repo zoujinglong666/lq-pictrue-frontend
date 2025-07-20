@@ -17,6 +17,36 @@ export async function deletePictureUsingPost(
   });
 }
 
+/** editPicture POST /api/picture/edit */
+export async function editPictureUsingPost(
+  body: API.PictureEditRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>("/api/picture/edit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** getPictureVOById GET /api/picture/get/vo */
+export async function getPictureVoByIdUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getPictureVOByIdUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePictureVO_>("/api/picture/get/vo", {
+    method: "GET",
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** listPictureByPage POST /api/picture/list/page */
 export async function listPictureByPageUsingPost(
   body: API.PictureQueryRequest,
@@ -45,6 +75,19 @@ export async function listPictureVoByPageUsingPost(
     data: body,
     ...(options || {}),
   });
+}
+
+/** listPictureTagCategory GET /api/picture/tag_category */
+export async function listPictureTagCategoryUsingGet(options?: {
+  [key: string]: any;
+}) {
+  return request<API.BaseResponsePictureTagCategory_>(
+    "/api/picture/tag_category",
+    {
+      method: "GET",
+      ...(options || {}),
+    }
+  );
 }
 
 /** uploadPicture POST /api/picture/upload */

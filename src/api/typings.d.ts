@@ -41,6 +41,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePictureTagCategory_ = {
+    code?: number;
+    data?: PictureTagCategory;
+    message?: string;
+  };
+
   type BaseResponsePictureVO_ = {
     code?: number;
     data?: PictureVO;
@@ -48,6 +54,11 @@ declare namespace API {
   };
 
   type deletePictureUsingPOSTParams = {
+    id?: number;
+  };
+
+  type getPictureVOByIdUsingGETParams = {
+    /** id */
     id?: number;
   };
 
@@ -113,10 +124,22 @@ declare namespace API {
     picScale?: number;
     picSize?: number;
     picWidth?: number;
+    reviewMessage?: string;
+    reviewStatus?: number;
+    reviewTime?: string;
+    reviewerId?: number;
     tags?: string;
     updateTime?: string;
     url?: string;
     userId?: number;
+  };
+
+  type PictureEditRequest = {
+    category?: string;
+    id?: number;
+    introduction?: string;
+    name?: string;
+    tags?: string[];
   };
 
   type PictureQueryRequest = {
@@ -127,6 +150,7 @@ declare namespace API {
     introduction?: string;
     name?: string;
     nullSpaceId?: boolean;
+    page?: number;
     pageSize?: number;
     picFormat?: string;
     picHeight?: number;
@@ -144,6 +168,11 @@ declare namespace API {
     startEditTime?: string;
     tags?: string[];
     userId?: number;
+  };
+
+  type PictureTagCategory = {
+    categoryList?: string[];
+    tagList?: string[];
   };
 
   type PictureVO = {
@@ -185,6 +214,15 @@ declare namespace API {
     checkPassword?: string;
     userAccount?: string;
     userPassword?: string;
+  };
+
+  type UserUpdateRequest = {
+    id?: number;
+    userAccount?: string;
+    userAvatar?: string;
+    userName?: string;
+    userProfile?: string;
+    userRole?: string;
   };
 
   type UserVO = {

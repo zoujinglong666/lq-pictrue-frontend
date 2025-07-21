@@ -3,11 +3,7 @@
     <div class="upload-container">
       <a-card class="upload-card">
         <h2 class="upload-title">上传图片</h2>
-        <a-select v-model:value="form.category" placeholder="请选择分类">
-          <a-select-option v-for="cat in categoryList" :key="cat.value" :value="cat.value">{{ cat.label }}</a-select-option>
-        </a-select>
         <a-form layout="vertical" :model="form" :rules="formRules" ref="formRef" @submit.prevent="handleSubmit">
-
           <a-form-item label="图片文件" name="url" class="upload-left-align">
             <CustomUpload @success="onSuccess" :picture-item="pictureItem" class="upload-component" />
           </a-form-item>
@@ -33,11 +29,6 @@
           </a-form-item>
         </a-form>
       </a-card>
-
-        <a-mentions v-model:value="value" autofocus :options="options" @select="onSelect"></a-mentions>
-
-
-
     </div>
   </div>
 </template>

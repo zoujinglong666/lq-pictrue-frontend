@@ -8,7 +8,7 @@ import RegisterPage from '@/pages/user/register/index.vue'
 import UserManagePage from '@/pages/userManage/index.vue'
 import PictureManagePage from '@/pages/pictureManage/index.vue'
 import PictureManageDetailPage from '@/pages/pictureManage/detail.vue'
-import UploadPage from '@/pages/upload/index.vue'
+import UploadPage from '@/pages/addPicture/index.vue'
 import UserProfilePage from '@/pages/user/profile/index.vue'
 
 const routes = [

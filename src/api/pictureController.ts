@@ -90,7 +90,7 @@ export async function listPictureTagCategoryUsingGet(options?: {
   );
 }
 
-/** uploadPicture POST /api/picture/upload */
+/** uploadPicture POST /api/picture/addPicture */
 export async function uploadPictureUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.uploadPictureUsingPOSTParams,

@@ -113,7 +113,7 @@ const handleSubmit = async () => {
       form.url = '';
       pictureItem.value = { url: '' };
       formRef.value?.resetFields();
-      await router.push('/pictureManage');
+      // await router.push('/pictureManage');
 
     }
   } catch (e: any) {

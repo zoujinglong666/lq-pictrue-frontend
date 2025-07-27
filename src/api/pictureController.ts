@@ -77,6 +77,21 @@ export async function listPictureVoByPageUsingPost(
   });
 }
 
+/** doPictureReview POST /api/picture/review */
+export async function doPictureReviewUsingPost(
+  body: API.PictureReviewRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>("/api/picture/review", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** listPictureTagCategory GET /api/picture/tag_category */
 export async function listPictureTagCategoryUsingGet(options?: {
   [key: string]: any;
@@ -90,7 +105,7 @@ export async function listPictureTagCategoryUsingGet(options?: {
   );
 }
 
-/** uploadPicture POST /api/picture/addPicture */
+/** uploadPicture POST /api/picture/upload */
 export async function uploadPictureUsingPost(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.uploadPictureUsingPOSTParams,

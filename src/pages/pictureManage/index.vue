@@ -7,7 +7,6 @@
 
   >
     <template #bodyCell="{ column, record }">
-
       <template v-if="column.key === 'name'">
       <div style="width: 100px;">{{record.name}}</div>
       </template>

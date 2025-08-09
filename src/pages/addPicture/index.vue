@@ -1,6 +1,7 @@
 <template>
   <div class="pic-detail-root">
     <div class="upload-container">
+      <a-segmented v-model:value="value1" block :options="selectedTags" />
       <a-card class="upload-card">
         <h2 class="upload-title">上传图片</h2>
         <a-form layout="vertical" :model="form" :rules="formRules" ref="formRef" @submit.prevent="handleSubmit">
@@ -39,7 +40,8 @@ import { ref, reactive, onMounted,watch } from "vue";
 import { message } from 'ant-design-vue';
 import {listPictureTagCategoryUsingGet, editPictureUsingPost} from '@/api/pictureController.ts';
 import {useRouter} from "vue-router";
-
+const selectedTags = reactive(['文件上传', 'URL上传']);
+const value1 = ref(selectedTags[0]);
 const pictureItem = ref<any>({ url: "" });
 const submitLoading = ref(false);
 const categoryList = ref<{ label: string; value: string }[]>([]);

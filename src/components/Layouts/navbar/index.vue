@@ -19,6 +19,9 @@
               <a  @click="handleProfile" href="/user/profile">个人信息</a>
             </a-menu-item>
             <a-menu-item>
+              <a  @click="handleSpace" href="/user/space">我的空间</a>
+            </a-menu-item>
+            <a-menu-item>
               <a href="javascript:;" @click="handleLogout">退出登录</a>
             </a-menu-item>
           </a-menu>
@@ -78,6 +81,9 @@ const handleLogin = () => {
 };
 const handleProfile = () => {
   router.push('/user/profile');
+}
+const handleSpace = () => {
+  router.push('/user/space');
 }
 const handleClick = (info: MenuInfo) => {
   current.value = [String(info.key)];

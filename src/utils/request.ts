@@ -9,13 +9,14 @@ const ENV_CONFIG: { [key: string]: string } = {
 };
 
 // 获取 BASE_URL，确保环境变量存在
-const BASE_URL = ENV_CONFIG[process.env.NODE_ENV] || ENV_CONFIG.development;
+const BASE_URL = ENV_CONFIG[import.meta.env.MODE] || ENV_CONFIG.development;
 
 // 创建 Axios 实例
-const myAxios = axios.create({
+const httpClient = axios.create({
     baseURL: BASE_URL,
     timeout: 10000,
     withCredentials: true,
+
 });
 export interface ApiResponse<T = any> {
     code: number;          // 业务状态码，例如 20000 成功，40000 参数错误，40100 未登录等
@@ -37,9 +38,14 @@ const checkLogin = (response:ApiResponse) => {
 };
 
 // 全局请求拦截器
-myAxios.interceptors.request.use(
+httpClient.interceptors.request.use(
     (config) => {
         // 可以在这里进行一些请求的处理，例如加上token等
+        const userStore = useUserStore();
+        const token = userStore.userInfo?.token;
+        if (token) {
+            config.headers['satoken'] =`Bearer ${token}`;
+        }
         return config;
     },
     (error) => {
@@ -50,7 +56,7 @@ myAxios.interceptors.request.use(
 );
 
 // 全局响应拦截器
-myAxios.interceptors.response.use(
+httpClient.interceptors.response.use(
     (response) => {
         checkLogin(response as unknown as ApiResponse);  // 提取成函数，保持代码简洁
         return response.data;  // 直接返回响应数据，减少冗余
@@ -67,4 +73,4 @@ myAxios.interceptors.response.use(
     }
 );
 
-export default myAxios;
+export default httpClient;

@@ -10,6 +10,7 @@ import PictureManagePage from '@/pages/pictureManage/index.vue'
 import PictureManageDetailPage from '@/pages/pictureManage/detail.vue'
 import UploadPage from '@/pages/addPicture/index.vue'
 import UserProfilePage from '@/pages/user/profile/index.vue'
+import UserSpacePage from '@/pages/user/space/index.vue'
 
 const routes = [
     {path: '/', component: HomePage, meta: { title: '主页' }},
@@ -19,8 +20,10 @@ const routes = [
     {path: '/user/profile', component: UserProfilePage, meta: { title: '个人信息', hideInMenu: true, hideFooter: true }},
     {path: '/pictureManage/detail', component: PictureManageDetailPage, meta: { title: '图片详情', hideInMenu: true, hideFooter: true }},
     {path: '/userManage', component: UserManagePage, meta: { title: '用户管理', permission: 'admin' }},
-    {path: '/pictureManage', component: PictureManagePage, meta: { title: '图片管理', permission: ['admin', 'user'] }},
+    {path: '/pictureManage', component: PictureManagePage, meta: { title: '图片管理', permission: ['admin'] }},
     {path: '/addPicture', component: UploadPage, meta: { title: '创建图片', permission: ['admin', 'user'] }},
+    {path: '/user/space', component: UserSpacePage, meta: { title: '个人空间', permission: ['admin', 'user'] }},
+
 ]
 
 const router = createRouter({

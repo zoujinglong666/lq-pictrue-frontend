@@ -4,15 +4,15 @@ import request from "@/utils/request";
 
 /** deletePicture POST /api/picture/delete */
 export async function deletePictureUsingPost(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.deletePictureUsingPOSTParams,
+  body: API.DeleteRequest,
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseBoolean_>("/api/picture/delete", {
     method: "POST",
-    params: {
-      ...params,
+    headers: {
+      "Content-Type": "application/json",
     },
+    data: body,
     ...(options || {}),
   });
 }
@@ -77,6 +77,24 @@ export async function listPictureVoByPageUsingPost(
   });
 }
 
+/** listPictureVOByPageWithCache POST /api/picture/list/page/vo/cache */
+export async function listPictureVoByPageWithCacheUsingPost(
+  body: API.PictureQueryRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePagePictureVO_>(
+    "/api/picture/list/page/vo/cache",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: body,
+      ...(options || {}),
+    }
+  );
+}
+
 /** doPictureReview POST /api/picture/review */
 export async function doPictureReviewUsingPost(
   body: API.PictureReviewRequest,
@@ -103,6 +121,21 @@ export async function listPictureTagCategoryUsingGet(options?: {
       ...(options || {}),
     }
   );
+}
+
+/** updatePicture POST /api/picture/update */
+export async function updatePictureUsingPost(
+  body: API.PictureUpdateRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>("/api/picture/update", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
 }
 
 /** uploadPicture POST /api/picture/upload */
@@ -142,6 +175,36 @@ export async function uploadPictureUsingPost(
     },
     data: formData,
     requestType: "form",
+    ...(options || {}),
+  });
+}
+
+/** uploadPictureByBatch POST /api/picture/upload/batch */
+export async function uploadPictureByBatchUsingPost(
+  body: API.PictureUploadByBatchRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseInt_>("/api/picture/upload/batch", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** uploadPictureByUrl POST /api/picture/upload/url */
+export async function uploadPictureByUrlUsingPost(
+  body: API.PictureUploadRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePictureVO_>("/api/picture/upload/url", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
     ...(options || {}),
   });
 }

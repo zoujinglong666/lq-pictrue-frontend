@@ -37,8 +37,9 @@
               <template #cover>
                 <img
                     class="gallery-img"
+                    loading="lazy"
                     :alt="item.title || '图片'"
-                    :src="item.url"
+                    :src="item.thumbnailUrl ||item.url || 'https://via.placeholder.com/1280x720.png?text=图片加载失败'"
                     :class="{ 'img-loaded': imageLoaded[item.id] }"
                     @load="handleImageLoad(item.id)"
                 />
@@ -81,8 +82,6 @@ import { onMounted, ref, watch } from "vue";
 import { useRouter } from 'vue-router';
 
 import { formatDate } from '@/utils/date';
-import NProgress from 'nprogress';
-import 'nprogress/nprogress.css';
 const searchText = ref('');
 const searchLoading = ref(false);
 interface PictureItem {
@@ -155,7 +154,6 @@ const fetchDataByTagsAndCategory = async () => {
 
 const fetchData = async () => {
   loading.value = true;
-  NProgress.start();
   const res = await listPictureVoByPageUsingPost({
     current: 1,
     pageSize: 20,
@@ -164,7 +162,6 @@ const fetchData = async () => {
   });
   pictureList.value = res.data?.records || [];
   loading.value = false;
-  NProgress.done();
 };
 
 watch(activeTag, () => {

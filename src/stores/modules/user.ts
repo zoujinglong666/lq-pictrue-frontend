@@ -107,7 +107,8 @@ export const useUserStore = defineStore("user", () => {
         getInfo, 
         logout, 
         setUserInfo, 
-        userInfo, 
+        userInfo,
+
         fetchUserInfo,
         isLoggedIn,
         hasPermission,

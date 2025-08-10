@@ -1,39 +1,58 @@
 <template>
   <div class="pic-detail-root">
     <div class="upload-container">
-      <a-segmented v-model:value="value1" :options="selectedTags" block/>
       <a-card class="upload-card">
-        <h2 class="upload-title">上传图片</h2>
+        <a-segmented
+            v-model:value="uploadType"
+            :options="[
+    { label: '文件上传', value: 'file'},
+    { label: 'URL上传', value: 'url' }
+  ]"
+            block
+        />
         <a-form ref="formRef" :model="form" layout="vertical" @submit.prevent="handleSubmit">
-          <a-form-item class="upload-left-align" label="图片文件" name="url">
+          <a-form-item class="upload-left-align" label="图片文件"  v-if="uploadType==='file'">
             <CustomUpload :spaceId="spaceId" :picture-item="pictureItem" class="upload-component" @success="onSuccess"/>
           </a-form-item>
-          <a-form-item label="图片名称" name="name" required>
-            <a-input v-model:value="form.name"
-                     placeholder="请输入图片名称"/>
+          <a-form-item class="upload-left-align" label="URL上传"  v-if="uploadType==='url'">
+            <a-input-search
+                v-model:value="picUrl"
+                placeholder="请输入文件url地址"
+                size="large"
+            >
+              <template #enterButton>
+                <a-button @click="handleSubmitPicUrl">上传图片</a-button>
+              </template>
+            </a-input-search>
+          </a-form-item>
+          <div v-if="pictureItem.url">
 
-          </a-form-item>
-          <a-form-item label="简介" name="introduction">
-            <a-textarea v-model:value="form.introduction" :rows="3" placeholder="请输入简介"/>
-          </a-form-item>
-          <a-form-item label="分类" name="category" required>
-            <a-select v-model:value="form.category" :get-popup-container="getPopupContainer"
-                       placeholder="请选择分类">
-              <a-select-option v-for="cat in categoryList" :key="cat.value" :value="cat.value">{{
-                  cat.label
-                }}
-              </a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item label="标签" name="tags">
-            <a-select v-model:value="form.tags" mode="tags" placeholder="请输入或选择标签" :get-popup-container="getPopupContainer">
-              <a-select-option v-for="tag in tagsData" :key="tag.value" :value="tag.value">{{
-                  tag.label
-                }}
-              </a-select-option>
-            </a-select>
-          </a-form-item>
+            <a-form-item label="图片名称" name="name" required>
+              <a-input v-model:value="form.name"
+                       placeholder="请输入图片名称"/>
 
+            </a-form-item>
+            <a-form-item label="简介" name="introduction">
+              <a-textarea v-model:value="form.introduction" :rows="3" placeholder="请输入简介"/>
+            </a-form-item>
+            <a-form-item label="分类" name="category" required>
+              <a-select v-model:value="form.category"
+                        placeholder="请选择分类">
+                <a-select-option v-for="cat in categoryList" :key="cat.value" :value="cat.value">{{
+                    cat.label
+                  }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+            <a-form-item label="标签" name="tags">
+              <a-select v-model:value="form.tags" mode="tags" placeholder="请输入或选择标签" >
+                <a-select-option v-for="tag in tagsData" :key="tag.value" :value="tag.value">{{
+                    tag.label
+                  }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+          </div>
           <a-form-item>
             <a-button :loading="submitLoading" style="width: 100%" type="primary" @click="handleSubmit">提交</a-button>
           </a-form-item>
@@ -45,19 +64,21 @@
 
 <script lang="ts" setup>
 import CustomUpload from "@/components/CustomUpload/index.vue";
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import {computed, onMounted, reactive, ref, h} from "vue";
 import {message} from 'ant-design-vue';
-import {editPictureUsingPost, listPictureTagCategoryUsingGet} from '@/api/pictureController.ts';
+import {
+  editPictureUsingPost,
+  listPictureTagCategoryUsingGet,
+  uploadPictureByUrlUsingPost
+} from '@/api/pictureController.ts';
 import {useRoute, useRouter} from "vue-router";
-
-const selectedTags = reactive(['文件上传', 'URL上传']);
-const value1 = ref(selectedTags[0]);
+const uploadType = ref('file');
 const pictureItem = ref<any>({url: "",
 });
 const submitLoading = ref(false);
 const categoryList = ref<{ label: string; value: string }[]>([]);
 const tagsData = ref<{ label: string; value: string }[]>([]);
-
+const picUrl = ref<string>('')
 const form = reactive({
   name: '',
   introduction: '',
@@ -77,14 +98,8 @@ const spaceId = computed(() => {
 // 移除表单验证规则，使用简单验证
 const formRef = ref();
 
-// 获取弹出容器
-const getPopupContainer = () => {
-  return document.body;
-};
-
 const onSuccess = (res: any) => {
   pictureItem.value = res.data;
-  form.url = res.url;
   form.name = res.data.name;
 };
 
@@ -118,46 +133,85 @@ const handleSubmit = async () => {
   }
   
   submitLoading.value = true;
-  try {
-    const params = {
-      id: pictureItem.value.id,
-      name: form.name,
-      introduction: form.introduction,
-      category: form.category,
-      tags: form.tags,
-      url: form.url,
-    };
-    const res: any = await editPictureUsingPost(params);
-    if (res.code === 0) {
-      message.success('图片上传成功！');
-      // 可选：重置表单
-      form.name = '';
-      form.introduction = '';
-      form.category = '';
-      form.tags = [];
-      form.url = '';
-      pictureItem.value = {url: ''};
-      formRef.value?.resetFields();
+
+  if(uploadType.value === 'url') {
+    try {
+      const params = {
+        id: pictureItem.value.id,
+        name: form.name,
+        introduction: form.introduction,
+        category: form.category,
+        tags: form.tags,
+      };
+      const res: any = await editPictureUsingPost(params);
+      if (res.code === 0) {
+        message.success('图片上传成功！');
+        // 可选：重置表单
+        form.name = '';
+        form.introduction = '';
+        form.category = '';
+        form.tags = [];
+        form.url = '';
+        pictureItem.value = {url: '',id:undefined};
+        formRef.value?.resetFields();
+      }
+    } catch (e: any) {
+      message.error(e.message || '上传失败');
+    } finally {
+      submitLoading.value = false;
     }
-  } catch (e: any) {
-    message.error(e.message || '上传失败');
-  } finally {
-    submitLoading.value = false;
+  }else {
+    try {
+      const params = {
+        id: pictureItem.value.id,
+        name: form.name,
+        introduction: form.introduction,
+        category: form.category,
+        tags: form.tags,
+      };
+      const res: any = await editPictureUsingPost(params);
+      if (res.code === 0) {
+        message.success('图片上传成功！');
+        // 可选：重置表单
+        form.name = '';
+        form.introduction = '';
+        form.category = '';
+        form.tags = [];
+        pictureItem.value = {url: ''};
+        formRef.value?.resetFields();
+      }
+    } catch (e: any) {
+      message.error(e.message || '上传失败');
+    } finally {
+      submitLoading.value = false;
+    }
   }
+
 };
 
 onMounted(() => {
   fetchTagsAndCategories();
 });
 
+const handleSubmitPicUrl=async () => {
+  const res = await uploadPictureByUrlUsingPost({
+    fileUrl:picUrl.value,
+  })
+  if(res.code === 0) {
+    console.log(res.data)
+    pictureItem.value = res.data;
+    form.name = res.data.name;
+    message.success("上传成功")
+    picUrl.value = '';
+  }
 
+}
 
 
 </script>
 
 <style scoped>
-.pic-detail-root {
-}
+
 
 .upload-container {
   width: 100%;
@@ -171,14 +225,6 @@ onMounted(() => {
   background: #fff;
 }
 
-.upload-title {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #2563eb;
-  margin-bottom: 28px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f0f0f0;
-}
 
 /* 上传区域居左对齐 */
 .upload-left-align {
@@ -234,4 +280,7 @@ onMounted(() => {
     font-size: 1.4rem;
   }
 }
+
+
+
 </style>

@@ -17,7 +17,7 @@
     <div v-else>
       <loading-outlined v-if="loading"></loading-outlined>
       <plus-outlined v-else></plus-outlined>
-      <div class="ant-upload-text">Upload</div>
+      <div class="ant-upload-text">点击上传图片</div>
     </div>
   </a-upload>
 </template>

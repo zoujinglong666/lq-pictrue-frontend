@@ -30,6 +30,16 @@
           v-if="!loading"
           :grid="{ gutter: 0, xs: 1, sm: 2, md: 3, lg: 4, xl: 5, xxl: 6 }"
           :data-source="pictureList"
+          :pagination="{
+        current: currentPage,
+        pageSize: pageSize,
+        total: totalCount,
+        showSizeChanger: true,
+        showQuickJumper: true,
+        pageSizeOptions: ['10', '20', '50', '100'],
+        onChange: handlePageChange,
+        onShowSizeChange: handlePageSizeChange
+      }"
           class="gallery-list"
       >
         <template #renderItem="{ item }">
@@ -123,6 +133,10 @@ const handleChange = (tag: string, checked: boolean) => {
   // 这里只是打印
   console.log(tag, checked);
 };
+
+const currentPage = ref(1);
+const pageSize = ref(20);
+const totalCount = ref(0);
 const pictureList = ref<PictureItem[]>([]);
 const imageLoaded = ref<{ [key: number]: boolean }>({});
 const loading = ref(true);
@@ -153,16 +167,30 @@ const fetchDataByTagsAndCategory = async () => {
   searchLoading.value = false;
 };
 
+// 你的 fetchData 函数改成支持分页参数：
 const fetchData = async () => {
   loading.value = true;
   const res = await listPictureVoByPageUsingPost({
-    current: 1,
-    pageSize: 20,
-    // tags: activeTag.value.split(','),
+    current: currentPage.value,
+    pageSize: pageSize.value,
     category: selectedCategories.value.includes('全部') ? undefined : selectedCategories.value.join(',')
   });
-  pictureList.value = res.data?.records || [];
+  if (res.code === 0) {
+    pictureList.value = res.data?.records || [];
+    totalCount.value = res.data?.total || 0; // 总条数，用于分页控件显示
+  }
   loading.value = false;
+};
+
+const handlePageChange = (page: number) => {
+  currentPage.value = page;
+  fetchData();
+};
+
+const handlePageSizeChange = (current: number, size: number) => {
+  pageSize.value = size;
+  currentPage.value = 1; // 换页大小通常从第一页开始
+  fetchData();
 };
 
 watch(activeTag, () => {

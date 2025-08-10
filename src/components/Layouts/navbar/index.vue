@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref} from 'vue';
+import {computed, ref,h} from 'vue';
 import {useRouter} from "vue-router";
 import {useUserStoreWithout} from "@/stores/modules/user.ts";
 import {userLogoutUsingPost} from "@/api/userController.ts";
@@ -90,12 +90,26 @@ const handleClick = (info: MenuInfo) => {
   current.value = [String(info.key)];
   router.push(String(info.key));
 };
-const handleLogout = async () => {
-  await userStore.logout();
-  await userLogoutUsingPost();
-  await router.push('/user/login');
-  window.location.reload();
-}
+import { Modal } from 'ant-design-vue';
+import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+
+const handleLogout = () => {
+  Modal.confirm({
+    title: '确认退出登录吗？',
+    icon: h(ExclamationCircleOutlined),
+    content: '退出后需要重新登录才能使用系统。',
+    okText: '退出登录',
+    cancelText: '取消',
+    okType: 'danger',
+    async onOk() {
+      await userStore.logout();
+      await userLogoutUsingPost();
+      await router.push('/user/login');
+      window.location.reload();
+    }
+  });
+};
+
 router.afterEach(() => {
   current.value = [router.currentRoute.value.path];
 });

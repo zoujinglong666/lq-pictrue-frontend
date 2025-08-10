@@ -16,9 +16,7 @@
 import Navbar from '@/components/Layouts/navbar/index.vue';
 import FooterInfo from '@/components/Layouts/footer/index.vue';
 import {useRoute} from "vue-router";
-import {useGlobalStore} from "@/stores/modules/global.ts";
 const $route = useRoute();
-const globalStore = useGlobalStore();
 </script>
 
 <style scoped>

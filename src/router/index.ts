@@ -12,7 +12,7 @@ import UploadPage from '@/pages/addPicture/index.vue'
 import UserProfilePage from '@/pages/user/profile/index.vue'
 import UserSpacePage from '@/pages/user/space/index.vue'
 
-const routes = [
+ export const routes = [
     {path: '/', component: HomePage, meta: { title: '主页' }},
     {path: '/about', component: AboutPage, meta: { title: '关于' }},
     {path: '/user/login', component: LoginPage, meta: { title: '登录', hideInMenu: true, hideFooter: true, hideLayout: true }},

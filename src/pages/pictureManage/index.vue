@@ -4,7 +4,6 @@
       ref="tableRef"
       :api="listPictureByPageUsingPost"
       :columns="columns"
-
   >
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'name'">

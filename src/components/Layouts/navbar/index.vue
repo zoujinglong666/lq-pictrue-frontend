@@ -38,13 +38,14 @@ import {useRouter} from "vue-router";
 import {useUserStoreWithout} from "@/stores/modules/user.ts";
 import {userLogoutUsingPost} from "@/api/userController.ts";
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
+import {routes as routeList} from "@/router";
 
 const current = ref<string[]>(['/']);
 const userStore = useUserStoreWithout();
 const router = useRouter();
 const isLoggedIn = computed(() => userStore.isLoggedIn);
 const menuItems = computed(() => {
-  const routes = router.getRoutes()
+  const routes = routeList
       .filter(route => {
         if (!route.meta?.title) return false;
         if (route.meta.hideInMenu) return false;

@@ -79,6 +79,7 @@ const picture = reactive<API.PictureVO>({
   picHeight: 0,
   picUrl: '',
   picName: '',
+
 });
 const editInfo = reactive({
   name: '',

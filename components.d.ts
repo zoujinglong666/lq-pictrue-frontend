@@ -53,6 +53,7 @@ declare module 'vue' {
     CustomUpload: typeof import('./src/components/CustomUpload/index.vue')['default']
     Footer: typeof import('./src/components/Layouts/footer/index.vue')['default']
     Navbar: typeof import('./src/components/Layouts/navbar/index.vue')['default']
+    PictureList: typeof import('./src/components/PictureList/index.vue')['default']
     ProForm: typeof import('./src/components/ProForm/index.vue')['default']
     ProTable: typeof import('./src/components/ProTable/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

@@ -1,30 +1,6 @@
 <template>
 
   <div>
-    <a-input-search
-
-        v-model:value="searchText"
-        placeholder="搜索图片"
-        :loading="searchLoading"
-        enter-button
-    />
-    <a-tabs v-model:activeKey="activeTag">
-      <a-tab-pane
-        v-for="tag in tagsData"
-        :key="tag"
-        :tab="tag"
-      />
-    </a-tabs>
-    <a-space :size="[0, 8]" wrap>
-      <a-checkable-tag
-        v-for="cat in categoryList"
-        :key="cat"
-        :checked="selectedCategories.includes(cat)"
-        @change="checked => handleCategoryChange(cat, checked)"
-      >
-        {{ cat }}
-      </a-checkable-tag>
-    </a-space>
     <div class="home-gallery">
       <a-list
           v-if="!loading"
@@ -78,13 +54,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-import {listPictureTagCategoryUsingGet, listPictureVoByPageUsingPost} from "@/api/pictureController.ts";
-import { onMounted, ref, watch } from "vue";
+import { listPictureVoByPageUsingPost} from "@/api/pictureController.ts";
+import {  ref, watch } from "vue";
 import { useRouter } from 'vue-router';
 
 import { formatDate } from '@/utils/date';
-const searchText = ref('');
-const searchLoading = ref(false);
 interface PictureItem {
   id: number;
   url?: string;
@@ -95,34 +69,10 @@ interface PictureItem {
   createTime?: string;
 }
 const activeTag = ref('');
-const tagsData = ref<string[]>([]);
-const categoryList = ref<string[]>([]);
-const selectTags = ref<boolean[]>([]);
-const categorySelect = ref<boolean[]>([]);
 const selectedCategories = ref<string[]>([]);
 
-const handleCategoryChange = (cat: string, checked: boolean) => {
-  if (cat === '全部') {
-    // 选中“全部”时，清空其他选中，只保留“全部”
-    selectedCategories.value = checked ? ['全部'] : [];
-  } else {
-    // 取消“全部”
-    selectedCategories.value = selectedCategories.value.filter(c => c !== '全部');
-    if (checked) {
-      selectedCategories.value.push(cat);
-    } else {
-      selectedCategories.value = selectedCategories.value.filter(c => c !== cat);
-    }
-  }
-  fetchData();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
 
-const handleChange = (tag: string, checked: boolean) => {
-  // 可根据需要处理选中逻辑
-  // 这里只是打印
-  console.log(tag, checked);
-};
+
 const pictureList = ref<PictureItem[]>([]);
 const imageLoaded = ref<{ [key: number]: boolean }>({});
 const loading = ref(true);
@@ -137,21 +87,7 @@ const goToDetail = (id: number) => {
   router.push({ path: `/pictureManage/detail`, query: { id } });
 };
 
-const fetchDataByTagsAndCategory = async () => {
-  searchLoading.value = true;
-  const res = await listPictureTagCategoryUsingGet();
-  if (res.code === 0 && res.data) {
-    tagsData.value = res.data.tagList || [];
-    // 加入“全部”分类
-    categoryList.value = ['全部', ...(res.data.categoryList || [])];
-    selectedCategories.value = ['全部'];
-    selectTags.value = tagsData.value.map(() => false);
-    if (tagsData.value.length > 0) {
-      activeTag.value = tagsData.value[0];
-    }
-  }
-  searchLoading.value = false;
-};
+
 
 const fetchData = async () => {
   loading.value = true;
@@ -169,9 +105,6 @@ watch(activeTag, () => {
   fetchData();
 });
 
-onMounted(() => {
-  fetchDataByTagsAndCategory();
-});
 </script>
 <style scoped>
 .home-gallery {
@@ -183,9 +116,7 @@ onMounted(() => {
   max-width: 1600px;
   margin: 0 auto;
 }
-.gallery-item {
-  margin-bottom: 10px !important;
-}
+
 .gallery-card {
   border-radius: 14px;
   overflow: hidden;

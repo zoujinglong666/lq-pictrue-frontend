@@ -1,6 +1,19 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    max-width: 100%;
+/* 全局样式 - 确保下拉组件不被遮挡 */
+.ant-select-dropdown,
+.ant-dropdown,
+.ant-tooltip,
+.ant-popover {
+  z-index: 1050 !important;
+}
+
+/* 确保模态框和抽屉有更高的层级 */
+.ant-modal-wrap,
+.ant-drawer {
+  z-index: 1060 !important;
+}
+
+/* 确保消息提示有最高层级 */
+.ant-message,
+.ant-notification {
+  z-index: 1070 !important;
 }

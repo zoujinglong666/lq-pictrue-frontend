@@ -54,3 +54,18 @@ export async function listSpaceByPageVoUsingPost(
     ...(options || {}),
   });
 }
+
+/** updateSpace POST /api/space/update */
+export async function updateSpaceUsingPost(
+  body: API.SpaceEditRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseSpaceVO_>("/api/space/update", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

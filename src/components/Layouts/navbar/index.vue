@@ -84,7 +84,7 @@ const handleProfile = () => {
   router.push('/user/profile');
 }
 const handleSpace = () => {
-  router.push('/user/space');
+  router.push('/my/space');
 }
 const handleClick = (info: MenuInfo) => {
   current.value = [String(info.key)];

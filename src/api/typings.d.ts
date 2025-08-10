@@ -71,6 +71,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseSpaceVO_ = {
+    code?: number;
+    data?: SpaceVO;
+    message?: string;
+  };
+
   type DeleteRequest = {
     id?: number;
   };
@@ -279,6 +285,11 @@ declare namespace API {
 
   type SpaceAddRequest = {
     spaceLevel?: number;
+    spaceName?: string;
+  };
+
+  type SpaceEditRequest = {
+    id?: number;
     spaceName?: string;
   };
 

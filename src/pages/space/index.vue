@@ -5,6 +5,7 @@ import {useUserStore} from "@/stores/modules/user.ts";
 import AddSpace from "@/pages/space/components/AddSpace.vue";
 import {useRouter} from "vue-router";
 import PictureList from "@/components/PictureList/index.vue";
+import EditableSpaceName from "@/pages/space/components/EditableSpaceName.vue";
 
 const userStore = useUserStore()
 const hasSpace = ref(false)
@@ -66,19 +67,23 @@ const formatMB = (bytes: number) => {
         </a-button>
       </template>
 
-      <div>
-        <strong>空间名称：</strong>{{ spaceData.spaceName }}
+      <div style="margin-bottom: 12px;">
+        <EditableSpaceName
+            :spaceData="spaceData"
+            @update:spaceName="newName => spaceData.spaceName = newName"
+        />
       </div>
 
       <div style="margin: 8px 0">
         <strong>已用容量：</strong>
         {{ formatMB(spaceData.totalSize) }} / {{ formatMB(spaceData.maxSize) }} MB
         <a-progress
+            :show-info="false"
+            status="active"
             :percent="(spaceData.totalSize / spaceData.maxSize) * 100"
             :stroke-width="8"
         />
       </div>
-
       <div>
         <strong>图片数量：</strong>
         {{ spaceData.totalCount }} / {{ spaceData.maxCount }} 张

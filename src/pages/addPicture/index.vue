@@ -27,6 +27,9 @@
           </a-form-item>
           <div v-if="pictureItem.url">
 
+            <a-image  v-if="uploadType==='url'" :src="pictureItem.url"
+                      :width="200"
+            />
             <a-form-item label="图片名称" name="name" required>
               <a-input v-model:value="form.name"
                        placeholder="请输入图片名称"/>
@@ -131,10 +134,8 @@ const handleSubmit = async () => {
     message.error('请选择分类');
     return;
   }
-  
   submitLoading.value = true;
 
-  if(uploadType.value === 'url') {
     try {
       const params = {
         id: pictureItem.value.id,
@@ -160,32 +161,6 @@ const handleSubmit = async () => {
     } finally {
       submitLoading.value = false;
     }
-  }else {
-    try {
-      const params = {
-        id: pictureItem.value.id,
-        name: form.name,
-        introduction: form.introduction,
-        category: form.category,
-        tags: form.tags,
-      };
-      const res: any = await editPictureUsingPost(params);
-      if (res.code === 0) {
-        message.success('图片上传成功！');
-        // 可选：重置表单
-        form.name = '';
-        form.introduction = '';
-        form.category = '';
-        form.tags = [];
-        pictureItem.value = {url: ''};
-        formRef.value?.resetFields();
-      }
-    } catch (e: any) {
-      message.error(e.message || '上传失败');
-    } finally {
-      submitLoading.value = false;
-    }
-  }
 
 };
 

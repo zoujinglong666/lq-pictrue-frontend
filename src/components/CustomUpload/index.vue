@@ -37,6 +37,7 @@ interface Props {
   multiple?: boolean;
   maxCount?: number;
   hint?: string;
+  spaceId?: string;
   pictureItem?: object;
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -44,6 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
   accept: '',
   multiple: false,
   maxCount: 1,
+  spaceId:'',
   hint: '支持单文件或批量上传，单文件最大2Mb',
 });
 
@@ -67,24 +69,29 @@ const loading = ref(false);
 // ------------------ 自定义上传逻辑 ------------------
 const handleCustomUpload: UploadProps['customRequest'] = async (options) => {
   const { file, onSuccess, onError } = options;
-  console.log(file)
   loading.value = true;
   try {
     const res = await uploadPictureUsingPost({
 
-    },{},file);
-    console.log('Upload success:', res)
-    message.success(`${file.name} 上传成功`);
-    fileList.value.push({
-      name: file.name,
-      url: res.data.url,
-      uid: res.data.id,
-      status: 'done',
-    });
-    onSuccess?.(res, file);
-    emit('success', res);
+    },{
+      spaceId: props.spaceId||undefined
+    },file);
+    if(res.code===0){
+      message.success(`${file.name} 上传成功`);
+      fileList.value.push({
+        name: file.name,
+        url: res.data.url,
+        uid: res.data.id,
+        status: 'done',
+      });
+      onSuccess?.(res, file);
+      emit('success', res);
+    }else {
+      fileList.value=[]
+      message.error(`${file.name} 上传失败`);
+    }
+
   } catch (err) {
-    message.error(`${file.name} 上传失败`);
     onError?.(err);
     emit('error', err);
   }finally {

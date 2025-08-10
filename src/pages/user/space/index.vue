@@ -3,6 +3,8 @@ import {onMounted, ref} from 'vue'
 import {listSpaceByPageVoUsingPost} from "@/api/spaceController.ts";
 import {useUserStore} from "@/stores/modules/user.ts";
 import AddSpace from "@/pages/user/space/components/AddSpace.vue";
+import {useRouter} from "vue-router";
+import PictureList from "@/components/PictureList/index.vue";
 
 onMounted(() => {
   checkHasSpace()
@@ -25,8 +27,19 @@ const checkHasSpace = async () => {
     hasSpace.value = false
   }
 }
+const router = useRouter()
+const handleSpaceUpload = () => {
+  router.push({
+    path: '/addPicture',
+    query: {
+      spaceId: spaceData.value.id
+    }
+  })
 
-
+}
+const formatMB = (bytes: number) => {
+  return (bytes / 1024 / 1024).toFixed(2)
+}
 </script>
 
 <template>
@@ -37,16 +50,30 @@ const checkHasSpace = async () => {
     <!-- 空间信息卡片 -->
     <a-card title="我的图片空间" style="margin-bottom: 24px">
       <template #extra>
-        <a-button>
+        <a-button type="primary" @click="handleSpaceUpload">
           上传图片
         </a-button>
       </template>
 
-      <div><strong>空间名称：</strong>{{ spaceData.spaceName }}</div>
-      <div><strong>已用容量：</strong>{{ spaceData.totalSize }} / {{ spaceData.maxSize }} 字节</div>
-      <div><strong>图片数量：</strong>{{ spaceData.totalCount }} / {{ spaceData.maxCount }} 张</div>
-    </a-card>
+      <div>
+        <strong>空间名称：</strong>{{ spaceData.spaceName }}
+      </div>
 
+      <div style="margin: 8px 0">
+        <strong>已用容量：</strong>
+        {{ formatMB(spaceData.totalSize) }} / {{ formatMB(spaceData.maxSize) }} MB
+        <a-progress
+            :percent="(spaceData.totalSize / spaceData.maxSize).toFixed(2) * 100"
+            :stroke-width="8"
+        />
+      </div>
+
+      <div>
+        <strong>图片数量：</strong>
+        {{ spaceData.totalCount }} / {{ spaceData.maxCount }} 张
+      </div>
+    </a-card>
+      <PictureList :space-id="spaceData.id"></PictureList>
 
   </div>
 

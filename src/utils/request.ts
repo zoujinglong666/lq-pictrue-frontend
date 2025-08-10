@@ -24,9 +24,8 @@ export interface ApiResponse<T = any> {
     message: string;       // 说明信息或错误提示
 }
 // 检查用户是否登录
-const checkLogin = (response:ApiResponse) => {
-    const { data } = response;
-    if (data.code === 40100||data.code === 40101) {
+const checkLogin = (responseData: ApiResponse) => {
+    if (responseData.code === 40100 || responseData.code === 40101) {
         const currentPath = window.location.pathname;
         if (!currentPath.includes('/user/login') && !currentPath.includes('/user/get/login')) {
             message.warning('请先登录');
@@ -58,7 +57,7 @@ httpClient.interceptors.request.use(
 // 全局响应拦截器
 httpClient.interceptors.response.use(
     (response) => {
-        checkLogin(response as unknown as ApiResponse);  // 提取成函数，保持代码简洁
+        checkLogin(response.data);  // 检查登录状态
         return response.data;  // 直接返回响应数据，减少冗余
     },
     (error) => {

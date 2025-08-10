@@ -2,6 +2,21 @@
 /* eslint-disable */
 import request from "@/utils/request";
 
+/** emailLogin POST /api/user/email-login */
+export async function emailLoginUsingPost(
+  body: API.UserEmailLoginRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseLoginUserVO_>("/api/user/email-login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** getLoginUser GET /api/user/get/login */
 export async function getLoginUserUsingGet(options?: { [key: string]: any }) {
   return request<API.BaseResponseLoginUserVO_>("/api/user/get/login", {
@@ -54,6 +69,21 @@ export async function userRegisterUsingPost(
   options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseLong_>("/api/user/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** sendEmailCode POST /api/user/send-email-code */
+export async function sendEmailCodeUsingPost(
+  body: API.UserSendCodeRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>("/api/user/send-email-code", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -30,7 +30,7 @@
                 </template>
               </a-card-meta>
               <div class="gallery-meta">
-                <span class="gallery-author">{{ item.userName || '匿名' }}</span>
+                <span class="gallery-author">{{ item.user.userAccount || '匿名' }}</span>
                 <span class="gallery-time">{{ formatDate(item.createTime, 'YYYY-MM-DD') }}</span>
               </div>
             </a-card>
@@ -53,10 +53,14 @@
 
   </div>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup name="PictureList">
 import { listPictureVoByPageUsingPost} from "@/api/pictureController.ts";
-import {  ref, watch } from "vue";
+import {onMounted, ref, watch} from "vue";
 import { useRouter } from 'vue-router';
+
+defineOptions({
+  name: "PictureList",
+})
 
 import { formatDate } from '@/utils/date';
 interface PictureItem {
@@ -68,6 +72,11 @@ interface PictureItem {
   userAvatar?: string;
   createTime?: string;
 }
+
+
+const props=defineProps({
+  spaceId:Number,
+})
 const activeTag = ref('');
 const selectedCategories = ref<string[]>([]);
 
@@ -94,6 +103,7 @@ const fetchData = async () => {
   const res = await listPictureVoByPageUsingPost({
     current: 1,
     pageSize: 20,
+    spaceId: props.spaceId,
     // tags: activeTag.value.split(','),
     category: selectedCategories.value.includes('全部') ? undefined : selectedCategories.value.join(',')
   });
@@ -101,19 +111,17 @@ const fetchData = async () => {
   loading.value = false;
 };
 
-watch(activeTag, () => {
+onMounted(()=>{
   fetchData();
-});
+})
 
 </script>
 <style scoped>
 .home-gallery {
-  padding: 24px 8px 8px 8px;
   min-height: 100vh;
 }
 .gallery-list {
   width: 100%;
-  max-width: 1600px;
   margin: 0 auto;
 }
 

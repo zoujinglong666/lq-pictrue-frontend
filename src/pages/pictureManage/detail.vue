@@ -48,11 +48,10 @@
         </a-descriptions>
 
         <div class="pic-ops-group">
-          <a-button shape="round" @click="handleDownload">下载</a-button>
-          <a-popconfirm title="确定要删除这张图片吗？" @confirm="handleDelete">
+          <a-button shape="round" @click="handleDownload(<string>picture.url,picture.name)">下载</a-button>
+          <a-popconfirm title="确定要删除这张图片吗？" @confirm="handleDelete(picture)">
             <a-button shape="round" danger>删除</a-button>
           </a-popconfirm>
-          <a-button type="primary" shape="round" @click="handleSave">保存修改</a-button>
         </div>
       </div>
     </div>
@@ -61,9 +60,9 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted,computed } from 'vue';
-import { message } from 'ant-design-vue';
+import {message, Modal} from 'ant-design-vue';
 import { useRoute } from 'vue-router';
-import {getPictureVoByIdUsingGet} from "@/api/pictureController.ts";
+import {deletePictureUsingPost, getPictureVoByIdUsingGet} from "@/api/pictureController.ts";
 const picture = reactive<API.PictureVO>({
   url: '',
   name: '',
@@ -101,15 +100,40 @@ const handleImgZoom = () => {
 };
 
 
-const handleDownload = () => {
-  message.success('下载成功（模拟）');
+const handleDownload = (url: string, filename?: string) => {
+  // 创建一个隐藏的 a 标签
+  const link = document.createElement('a');
+  link.href = url;
+
+  // 如果是跨域且不想打开页面，可尝试设置 download 属性（部分浏览器可能会拦截）
+  if (filename) {
+    link.download = filename;
+  }
+
+  // 触发点击
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
-const handleDelete = () => {
-  message.success('已删除（模拟）');
+
+const handleDelete = (record: any) => {
+  Modal.confirm({
+    title: '确定要删除这张图片吗？',
+    content: `图片名称：${record.name}`,
+    okText: '删除',
+    okType: 'danger',
+    cancelText: '取消',
+    async onOk() {
+      const res = await deletePictureUsingPost({ id: record.id });
+      if (res.code === 0 && res.data) {
+        message.success('删除成功');
+      } else {
+        message.error(res.message || '删除失败');
+      }
+    },
+  });
 };
-const handleSave = () => {
-  message.success('已保存（模拟）');
-};
+
 
 
 const detailId=computed(()=>route.query.id);

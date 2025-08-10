@@ -97,6 +97,7 @@ declare namespace API {
     createTime?: string;
     editTime?: string;
     id?: number;
+    token?: string;
     updateTime?: string;
     userAccount?: string;
     userAvatar?: string;
@@ -325,6 +326,11 @@ declare namespace API {
     spaceId?: number;
   };
 
+  type UserEmailLoginRequest = {
+    code?: string;
+    email?: string;
+  };
+
   type UserLoginRequest = {
     userAccount?: string;
     userPassword?: string;
@@ -334,6 +340,10 @@ declare namespace API {
     checkPassword?: string;
     userAccount?: string;
     userPassword?: string;
+  };
+
+  type UserSendCodeRequest = {
+    email?: string;
   };
 
   type UserUpdateRequest = {

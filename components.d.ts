@@ -55,6 +55,7 @@ declare module 'vue' {
     ATabs: typeof import('ant-design-vue/es')['Tabs']
     ATag: typeof import('ant-design-vue/es')['Tag']
     ATextarea: typeof import('ant-design-vue/es')['Textarea']
+    ATypographyTitle: typeof import('ant-design-vue/es')['TypographyTitle']
     AUpload: typeof import('ant-design-vue/es')['Upload']
     BasicLayout: typeof import('./src/components/Layouts/BasicLayout.vue')['default']
     CustomUpload: typeof import('./src/components/CustomUpload/index.vue')['default']

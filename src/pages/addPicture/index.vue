@@ -171,9 +171,9 @@ onMounted(() => {
 const handleSubmitPicUrl=async () => {
   const res = await uploadPictureByUrlUsingPost({
     fileUrl:picUrl.value,
+    spaceId:spaceId.value as number,
   })
   if(res.code === 0) {
-    console.log(res.data)
     pictureItem.value = res.data;
     form.name = res.data.name;
     message.success("上传成功")

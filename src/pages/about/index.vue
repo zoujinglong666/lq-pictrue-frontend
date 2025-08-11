@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import Logo from "@/assets/images/logo.png";
+import { PictureOutlined, SearchOutlined, UserOutlined, SafetyOutlined, ThunderboltOutlined, ToolOutlined } from '@ant-design/icons-vue';
+
 const githubUrl = 'https://github.com/your-org/lq-pictrue-frontend';
+
+const features = [
+  { icon: PictureOutlined, title: '多图上传', desc: '支持多图上传、分类、标签筛选、模糊搜索', color: ['#ff9a9e', '#fad0c4'] },
+  { icon: SearchOutlined, title: '瀑布流浏览', desc: '骨架屏、进度条、图片加载动画，浏览体验顺畅', color: ['#a18cd1', '#fbc2eb'] },
+  { icon: UserOutlined, title: '用户与权限', desc: '注册、登录、权限管理，管理员与普通用户分级', color: ['#fbc2eb', '#a6c1ee'] },
+  { icon: SafetyOutlined, title: '全局安全', desc: '全局 Loading、自动登录状态管理与权限拦截', color: ['#fddb92', '#d1fdff'] },
+  { icon: ThunderboltOutlined, title: '响应式布局', desc: '适配桌面与移动端，UI 极简美观', color: ['#89f7fe', '#66a6ff'] },
+  { icon: ToolOutlined, title: '技术栈', desc: 'Vue3 + Vite + Pinia + Ant Design Vue + TypeScript', color: ['#84fab0', '#8fd3f4'] },
+];
 </script>
 
 <template>
@@ -10,48 +21,33 @@ const githubUrl = 'https://github.com/your-org/lq-pictrue-frontend';
         <img :src="Logo" alt="logo" class="about-logo-img" />
         <span class="about-title">龙琪图库</span>
       </div>
-      <h2 class="about-heading">关于我们</h2>
       <p class="about-desc">
-        龙琪图库是一个专注于图片内容管理与分享的现代化平台，致力于为用户提供高效、便捷、美观的图片上传、浏览、管理与检索体验。
+        龙琪图库是一个专注于图片内容管理与分享的平台，致力于提供高效、美观的图片上传、浏览、管理与检索体验。
       </p>
-      <ul class="about-list">
-        <li>🖼️ 支持多图上传、图片分类、标签筛选、模糊搜索</li>
-        <li>🔍 首页瀑布流浏览，骨架屏、进度条、图片加载动画</li>
-        <li>👤 用户注册、登录、权限管理，支持管理员与普通用户分级</li>
-        <li>🛡️ 全局 Loading、自动登录状态管理、自动登出与权限拦截</li>
-        <li>⚡ 响应式布局，适配桌面与移动端，极简美观的 UI 风格</li>
-        <li>🛠️ 技术栈：Vue3 + Vite + Pinia + Ant Design Vue + dayjs + TypeScript</li>
-      </ul>
-      <div class="about-github">
-        <span>项目开源地址：</span>
-        <a :href="githubUrl" target="_blank" rel="noopener" class="about-link">{{ githubUrl }}</a>
-      </div>
-      <div class="about-footer">
-        <span>© 2024 龙琪图库 | 由 zou123 & contributors 设计与开发</span>
+
+      <!-- 卡片网格 -->
+      <div class="feature-grid">
+        <div v-for="(item, index) in features" :key="index" class="feature-card">
+          <div class="feature-icon" :style="{ background: `linear-gradient(135deg, ${item.color[0]}, ${item.color[1]})` }">
+            <component :is="item.icon" style="font-size: 24px; color: white;" />
+          </div>
+          <h3 class="feature-title">{{ item.title }}</h3>
+          <p class="feature-desc">{{ item.desc }}</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.about-root {
-
-}
+.about-root { display: flex; justify-content: center; padding: 20px; }
 .about-card {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 4px 24px 0 rgba(60,80,120,0.10);
-  padding: 48px 36px 32px 36px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.about-logo {
-  display: flex;
-  align-items: center;
-  margin-bottom: 18px;
-}
+.about-logo { display: flex; align-items: center; margin-bottom: 18px; }
 .about-logo-img {
   width: 48px;
   height: 48px;
@@ -59,32 +55,51 @@ const githubUrl = 'https://github.com/your-org/lq-pictrue-frontend';
   border-radius: 50%;
   background: #f6f8fa;
 }
-.about-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2563eb;
-  letter-spacing: 2px;
+.about-title { font-size: 2rem; font-weight: 700; color: #2563eb; letter-spacing: 2px; }
+.about-desc { color: #555; font-size: 1.08rem; margin-bottom: 30px; text-align: center; max-width: 800px; }
+
+/* 网格布局 */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 30px;
+  width: 100%;
 }
-.about-heading {
-  font-size: 1.5rem;
+.feature-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.feature-card:hover {
+  background: #fff;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+.feature-icon {
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto 14px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.feature-title {
+  font-size: 1.15rem;
   font-weight: 600;
-  margin-bottom: 16px;
-  color: #2a3a4a;
-  text-align: center;
+  margin-bottom: 8px;
 }
-.about-desc {
-  color: #555;
-  font-size: 1.08rem;
-  margin-bottom: 18px;
-  text-align: center;
+.feature-desc {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
 }
-.about-list {
-  color: #444;
-  font-size: 1rem;
-  margin-bottom: 20px;
-  padding-left: 1.2em;
-  line-height: 1.8;
-}
+
 .about-github {
   margin-bottom: 18px;
   font-size: 1rem;
@@ -102,17 +117,14 @@ const githubUrl = 'https://github.com/your-org/lq-pictrue-frontend';
   margin-top: 12px;
   text-align: center;
 }
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .feature-grid { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 600px) {
-  .about-card {
-    padding: 24px 8px 16px 8px;
-    max-width: 98vw;
-  }
-  .about-logo-img {
-    width: 36px;
-    height: 36px;
-  }
-  .about-title {
-    font-size: 1.3rem;
-  }
+  .feature-grid { grid-template-columns: 1fr; }
+  .about-card { padding: 24px 12px; }
+  .about-title { font-size: 1.4rem; }
 }
 </style>
